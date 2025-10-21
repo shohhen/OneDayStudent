@@ -1,22 +1,42 @@
-import { useLanguage } from '@/hooks/useLanguage'
-import { LANGUAGES } from '@/consts/config'
-import {Button} from "@/components/ui/button.tsx";
+import React from 'react';
+import type { Lang } from '../types';
+import { MouseTrackingCard } from './ui/MouseTrackingCard';
 
-export default function LanguageSwitcher() {
-    const { lang, setLang } = useLanguage()
+interface LanguageSwitcherProps {
+    lang: Lang;
+    setLang: (lang: Lang) => void;
+}
+
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ lang, setLang }) => {
+    const languages: { code: Lang, name: string }[] = [
+        { code: 'uz', name: 'O\'z' },
+        { code: 'ru', name: 'Ру' },
+        { code: 'en', name: 'En' },
+    ];
 
     return (
-        <div className="flex items-center space-x-2 glass-card p-1 rounded-full border border-border">
-            {LANGUAGES.map(l => (
-                <Button
-                    key={l.code}
-                    onClick={() => setLang(l.code as any)}
-                    variant={lang === l.code ? 'default' : 'ghost'}
-                    size="sm"
-                >
-                    {l.name}
-                </Button>
-            ))}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+            {languages.map((language) => {
+                const isSelected = language.code === lang;
+
+                return (
+                    <MouseTrackingCard
+                        key={language.code}
+                        className={`
+              px-4 py-2 rounded-full text-sm font-medium
+              ${isSelected ? 'active' : ''}
+              cursor-pointer
+            `}
+                        onClick={() => setLang(language.code)}
+                    >
+                        <span className="relative z-2">{language.name}</span>
+                        {/* Active indicator dot */}
+                        {isSelected && (
+                            <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+                        )}
+                    </MouseTrackingCard>
+                );
+            })}
         </div>
-    )
-}
+    );
+};
