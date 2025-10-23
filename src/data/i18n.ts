@@ -24,6 +24,10 @@ export const translations: Record<Lang, TranslationSet> = {
         thankYouTitle: "You're on the Wishlist!",
         thankYouSubtitle: "Thank you! We will contact you on Telegram or by phone as soon as the experiences are ready to launch.",
         headerTitle: "One Day Student",
+        consentText: "I agree to be contacted about this university recommendation.",
+        consentError: "Please provide your consent to proceed with your application.",
+        clickToSelect: "Click on a university to reserve your spot",
+        backButton: "Back to recommendations",
     },
     ru: {
         heroTitle: "Не уверены в выборе будущей специальности?",
@@ -48,6 +52,10 @@ export const translations: Record<Lang, TranslationSet> = {
         thankYouTitle: "Вы в списке ожидания!",
         thankYouSubtitle: "Спасибо! Мы свяжемся с вами по Telegram или телефону, как только программа 'Студент на один день' будет готова к запуску.",
         headerTitle: "Студент на один день",
+        consentText: "I agree to be contacted about this university recommendation.",
+        consentError: "Please provide your consent to proceed with your application.",
+        clickToSelect: "Нажмите на университет, чтобы зарезервировать место",
+        backButton: "Назад к рекомендациям",
     },
     uz: {
         heroTitle: "Kelajakdagi mutaxassisligingizga ishonchingiz komilmi?",
@@ -72,6 +80,10 @@ export const translations: Record<Lang, TranslationSet> = {
         thankYouTitle: "Siz istaklar ro'yxatidasiz!",
         thankYouSubtitle: "Rahmat! 'Bir kunlik talaba' tajribasi tayyor bo'lishi bilan siz bilan Telegram yoki telefon orqali bog'lanamiz.",
         headerTitle: "Bir Kun Talaba",
+        consentText: "I agree to be contacted about this university recommendation.",
+        consentError: "Please provide your consent to proceed with your application.",
+        clickToSelect: "Joy band qilish uchun universitetni tanlang",
+        backButton: "Tavsiyalarga qaytish",
     }
 };
 

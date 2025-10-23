@@ -1,42 +1,35 @@
 import React from 'react';
-import type { Lang } from '../types';
-import { MouseTrackingCard } from './ui/MouseTrackingCard';
+import type {Lang} from '../types';
 
 interface LanguageSwitcherProps {
     lang: Lang;
     setLang: (lang: Lang) => void;
 }
 
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ lang, setLang }) => {
-    const languages: { code: Lang, name: string }[] = [
-        { code: 'uz', name: 'O\'z' },
-        { code: 'ru', name: 'Ру' },
-        { code: 'en', name: 'En' },
-    ];
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({lang, setLang}) => {
+    // Define all available languages
+    const languages: Record<Lang, string> = {
+        uz: "O'z",
+        ru: 'Py',
+        en: 'En'
+    };
 
     return (
-        <div className="flex flex-wrap items-center justify-center gap-2">
-            {languages.map((language) => {
-                const isSelected = language.code === lang;
-
-                return (
-                    <MouseTrackingCard
-                        key={language.code}
-                        className={`
-              px-4 py-2 rounded-full text-sm font-medium
-              ${isSelected ? 'active' : ''}
-              cursor-pointer
-            `}
-                        onClick={() => setLang(language.code)}
-                    >
-                        <span className="relative z-2">{language.name}</span>
-                        {/* Active indicator dot */}
-                        {isSelected && (
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
-                        )}
-                    </MouseTrackingCard>
-                );
-            })}
+        <div className="flex space-x-2">
+            {(Object.keys(languages) as Lang[]).map((code) => (
+                <button
+                    key={code}
+                    onClick={() => setLang(code)}
+                    className={`w-11 h-11 flex items-center justify-center rounded-xl transition-colors
+                        ${lang === code
+                        ? 'bg-primary text-white border border-primary'
+                        : 'bg-white/10 text-white/80 border border-white/20 hover:bg-white/15'}`
+                    }
+                    aria-label={`Switch to ${code} language`}
+                >
+                    {languages[code]}
+                </button>
+            ))}
         </div>
     );
 };

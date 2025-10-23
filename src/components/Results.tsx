@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import type {TranslationSet, University} from '../types';
-import {GOOGLE_SHEET_URL} from '../config';
-import {Button} from './ui/Button';
-import {MouseTrackingCard} from "./ui/MouseTrackingCard.tsx";
+import React, { useState } from 'react';
+import type { TranslationSet, University } from '../types';
+import { GOOGLE_FORM_URL, GOOGLE_FORM_FIELDS } from '../config';
+import { Button } from './ui/Button';
+import { MouseTrackingCard } from "./ui/MouseTrackingCard";
+import { useQuizContext } from '../utils/QuizContext';
 
 interface ResultsProps {
     recommendations: University[];
@@ -10,12 +11,29 @@ interface ResultsProps {
     t: TranslationSet;
 }
 
-export const Results: React.FC<ResultsProps> = ({recommendations, onConfirm, t}) => {
+export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t }) => {
+    const { answers, resetAnswers } = useQuizContext();
     const [selectedUni, setSelectedUni] = useState<University | null>(null);
+    const [showForm, setShowForm] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [contact, setContact] = useState<string>('');
+    const [consent, setConsent] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+
+    // Handle university selection
+    const handleUniSelect = (uni: University) => {
+        setSelectedUni(uni);
+        setShowForm(true);
+        // Scroll to top when showing form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Go back to university selection
+    const handleBack = () => {
+        setShowForm(false);
+        setError('');
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -25,80 +43,144 @@ export const Results: React.FC<ResultsProps> = ({recommendations, onConfirm, t})
         if (!selectedUni) {
             return;
         }
-        if (GOOGLE_SHEET_URL === 'YOUR_GOOGLE_SHEET_WEB_APP_URL') {
-            return setError(t.devError);
+        if (!consent) {
+            return setError(t.consentError || "Please provide your consent to proceed.");
+        }
+        if (!GOOGLE_FORM_URL || !GOOGLE_FORM_FIELDS) {
+            return setError(t.devError || "Google Form is not properly configured.");
         }
 
         setIsSubmitting(true);
         setError('');
 
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('contact', contact);
-        formData.append('selected_university', selectedUni.name);
-        formData.append('timestamp', new Date().toISOString());
+        // Format current date and time as UTC - YYYY-MM-DD HH:MM:SS
+        const now = new Date();
+        const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
 
         try {
-            const response = await fetch(GOOGLE_SHEET_URL, {method: 'POST', body: formData});
-            if (response.ok) {
-                onConfirm();
-            } else {
-                throw new Error('Network response was not ok.');
-            }
+            // Format the answers as a JSON string
+            const answersString = JSON.stringify(answers);
+
+            // Create form data object for submission
+            const formData = new URLSearchParams();
+            formData.append(GOOGLE_FORM_FIELDS.name, name);
+            formData.append(GOOGLE_FORM_FIELDS.contact, contact);
+            formData.append(GOOGLE_FORM_FIELDS.selectedUniversity, selectedUni.name);
+            formData.append(GOOGLE_FORM_FIELDS.answers, answersString);
+            formData.append(GOOGLE_FORM_FIELDS.consent, consent ? 'Yes' : 'No');
+            formData.append(GOOGLE_FORM_FIELDS.timestamp, timestamp);
+
+            // Send the request using POST method
+            await fetch(GOOGLE_FORM_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData,
+            });
+
+            // Google Form submissions with no-cors mode don't return a response we can check
+            // So we assume success and handle the completion
+            resetAnswers();
+            onConfirm();
         } catch (error) {
-            console.error('Submission Error:', error);
+            console.error('Form Submission Error:', error);
             setError(t.submitError);
             setIsSubmitting(false);
         }
     };
 
-    return (
-        <div className="animate-enter max-w-4xl mx-auto">
+    // STEP 1: University Recommendations View
+    const renderUniversityMatches = () => (
+        <div className="animate-enter max-w-4xl mx-auto px-3 pt-6 w-full">
             <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-extrabold">{t.resultsTitle}</h2>
-                <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">{t.resultsSubtitle}</p>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">{t.resultsTitle}</h2>
+                <p className="text-muted-foreground mt-2 max-w-2xl mx-auto text-sm sm:text-base">{t.resultsSubtitle}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 my-6 sm:my-8">
                 {recommendations.map((uni, index) => (
-                    <MouseTrackingCard key={uni.id} onClick={() => setSelectedUni(uni)}
-                                       className={`${selectedUni?.id === uni.id ? 'ring-2 ring-primary ring-offset-4 ring-offset-background' : ''} glass-card rounded-xl p-6 h-full`}>
-                        {index === 0 && <div className="text-sm font-bold text-primary mb-2">{t.topMatch}</div>}
-                        <h3 className="text-xl font-bold">{uni.name}</h3>
-                        <p className="text-muted-foreground mt-2 text-sm flex-grow">"{uni.reason}"</p>
+                    <MouseTrackingCard
+                        key={uni.id}
+                        onClick={() => handleUniSelect(uni)}
+                        className="glass-card rounded-xl p-4 sm:p-6 h-full cursor-pointer hover:scale-[1.02] transition-transform"
+                    >
+                        {index === 0 && <div className="text-xs sm:text-sm font-bold text-primary mb-2">{t.topMatch}</div>}
+                        <h3 className="text-lg sm:text-xl font-bold">{uni.name}</h3>
+                        <p className="text-muted-foreground mt-2 text-xs sm:text-sm flex-grow">"{uni.reason}"</p>
                     </MouseTrackingCard>
                 ))}
             </div>
 
-            <MouseTrackingCard className="p-8 mt-10">
-                <h3 className="text-2xl font-bold text-center">{t.reserveTitle}</h3>
-                <p className="text-center text-muted-foreground mt-2"
+            <div className="text-center text-sm text-muted-foreground mt-8">
+                {t.clickToSelect || "Click on a university to reserve your spot"}
+            </div>
+        </div>
+    );
+
+    // STEP 2: Registration Form View
+    const renderRegistrationForm = () => (
+        <div className="animate-enter max-w-4xl mx-auto px-3 pt-6 w-full">
+            <div className="flex items-center mb-6">
+                <button
+                    onClick={handleBack}
+                    className="flex items-center text-sm text-primary hover:text-primary/80"
+                    aria-label="Go back"
+                >
+                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    {t.backButton || "Back to recommendations"}
+                </button>
+            </div>
+
+            <MouseTrackingCard className="p-5 sm:p-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-center">{t.reserveTitle}</h3>
+
+                <div className="my-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                    <h4 className="font-bold text-lg">{selectedUni?.name}</h4>
+                    <p className="text-sm mt-2 text-white/80">"{selectedUni?.reason}"</p>
+                </div>
+
+                <p className="text-center text-muted-foreground mt-2 text-sm"
                    dangerouslySetInnerHTML={{__html: t.reserveSubtitle.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}}/>
 
-                {!selectedUni &&
-                    <p className="text-center font-semibold text-primary mt-6 animate-pulse">{t.choosePrompt}</p>}
+                <form onSubmit={handleSubmit} className="mt-6 max-w-sm mx-auto animate-enter">
+                    <input type="text" placeholder={t.yourName} value={name}
+                           onChange={(e) => setName(e.target.value)}
+                           className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
+                           disabled={isSubmitting}/>
+                    <input type="text" placeholder={t.yourContact} value={contact}
+                           onChange={(e) => setContact(e.target.value)}
+                           className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
+                           disabled={isSubmitting}/>
 
-                {selectedUni && (
-                    <form onSubmit={handleSubmit} className="mt-6 max-w-sm mx-auto animate-enter">
-                        <p className="text-center text-sm mb-4">You've selected: <strong
-                            className="text-primary">{selectedUni.name}</strong></p>
-                        <input type="text" placeholder={t.yourName} value={name}
-                               onChange={(e) => setName(e.target.value)}
-                               className="w-full px-4 py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
-                               disabled={isSubmitting}/>
-                        <input type="text" placeholder={t.yourContact} value={contact}
-                               onChange={(e) => setContact(e.target.value)}
-                               className="w-full px-4 py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
-                               disabled={isSubmitting}/>
-                        <Button type="submit" onClick={() => {
-                        }} className="w-full"
-                                disabled={isSubmitting || !selectedUni}>{isSubmitting ? t.submittingButton : t.submitButton}</Button>
-                        {error && <p className="text-destructive text-sm mt-2 text-center">{error}</p>}
-                        <p className="text-xs text-muted-foreground text-center mt-3">{t.formFinePrint}</p>
-                    </form>
+                    {/* Consent checkbox with Tailwind classes */}
+                    <div className="flex items-start mb-4 p-3 bg-white/10 border border-white/20 rounded-md">
+                        <input
+                            type="checkbox"
+                            id="consent"
+                            checked={consent}
+                            onChange={(e) => setConsent(e.target.checked)}
+                            className="w-5 h-5 mt-0.5 mr-2 rounded border-gray-400 text-primary focus:ring-primary"
+                            style={{appearance: 'checkbox', opacity: 1}}
+                            disabled={isSubmitting}
+                        />
+                        <label htmlFor="consent" className="text-xs sm:text-sm leading-tight">
+                            {t.consentText || "I agree to be contacted about this university recommendation."}
+                        </label>
+                    </div>
 
-                )}
+                    <Button type="submit" onClick={() => {}} className="w-full"
+                            disabled={isSubmitting}>{isSubmitting ? t.submittingButton : t.submitButton}</Button>
+                    {error && <p className="text-destructive text-xs sm:text-sm mt-2 text-center">{error}</p>}
+                    <p className="text-xs text-muted-foreground text-center mt-3">{t.formFinePrint}</p>
+                </form>
             </MouseTrackingCard>
         </div>
     );
+
+    // Render the appropriate view based on state
+    return showForm ? renderRegistrationForm() : renderUniversityMatches();
 };
