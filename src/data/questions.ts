@@ -15,7 +15,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'learningStyle',
-            q: "Which 'One Day Student' experience sounds most like you?",
+            q: "Which university experience sounds most like you?",
             o: [
                 { v: 'project', l: "Give me a real-world project. I want to build an app or create a marketing plan." },
                 { v: 'theory', l: "Let me shadow a brilliant professor and sit in on a deep, theoretical lecture." },
@@ -113,10 +113,10 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'learningStyle',
-            q: "Какой опыт 'Студента на один день' вам больше всего подходит?",
+            q: "Какой вы представляете свой опыт в университете?",
             o: [
                 { v: 'project', l: "Дайте мне реальный проект. Я хочу создать приложение или разработать маркетинговый план." },
-                { v: 'theory', l: "Позвольте мне стать тенью блестящего профессора и посетить глубокую теоретическую лекцию." },
+                { v: 'theory', l: "Позвольте мне работать вместе с блестящим профессором и посетить глубокую теоретическую лекцию." },
                 { v: 'social', l: "Я хочу присоединиться к дебатам в студенческом клубе, общаться и почувствовать 'атмосферу' кампуса." }
             ]
         },
@@ -131,9 +131,9 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'environment',
-            q: "В какой университетской среде, по вашему мнению, вы бы преуспели?",
+            q: "В какой кампусе, по вашему мнению, вы бы преуспели?",
             o: [
-                { v: 'modern', l: "Современный кампус из 'стекла и стали'. Международный, динамичный и ориентированный на технологии." },
+                { v: 'modern', l: "Современный кампус. Международный, динамичный и ориентированный на технологии." },
                 { v: 'traditional', l: "Большой, традиционный кампус с историей. Большие библиотеки и 'классическая' атмосфера." },
                 { v: 'community', l: "Небольшое, сплоченное сообщество. Больше похожее на 'бизнес-школу', где я знаю своих профессоров." }
             ]
@@ -150,7 +150,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         // --- NEW QUESTIONS START HERE ---
         {
             id: 'problemSolving',
-            q: "Когда вы сталкиваетесь с действительно сложной проблемой, каков ваш первый инстинкт?",
+            q: "Когда вы сталкиваетесь с действительно сложной проблемой, каков ваш первый шаг к его выполнению?",
             o: [
                 { v: 'analytical', l: "Разбить ее на мелкие логические шаги и проанализировать данные." },
                 { v: 'creative', l: "Провести мозговой штурм, придумать нестандартные идеи и попробовать что-то новое." },
@@ -187,7 +187,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         // --- NEW QUESTIONS END HERE ---
         {
             id: 'field',
-            q: "И, наконец, к какой общей области вы склоняетесь?",
+            q: "И, наконец, к какому общему направлению вы склоняетесь?",
             o: [
                 { v: 'tech', l: "Технологии и инженерия" },
                 { v: 'business', l: "Бизнес и финансы" },
@@ -201,7 +201,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
     uz: [
         {
             id: 'ambition',
-            q: "Ideal martabangizni tasavvur qilganingizda, sizni nima eng ko'p hayajonga soladi?",
+            q: "Ideal karyerangizni tasavvur qilganingizda, sizni nima ko‘proq hayajonga soladi?",
             o: [
                 { v: 'build', l: "Noldan yangi narsa qurish, ehtimol o'z kompaniyamni." },
                 { v: 'expert', l: "Murakkab muammolarni hal qilish va sohada yetakchi mutaxassis bo'lish." },
@@ -211,7 +211,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'learningStyle',
-            q: "Qaysi 'Bir kunlik talaba' tajribasi sizga ko'proq yoqadi?",
+            q: "Qaysi universitet tajribasi sizga ko‘proq yoqadi?",
             o: [
                 { v: 'project', l: "Menga haqiqiy loyiha bering. Men ilova yaratmoqchiman yoki marketing rejasini ishlab chiqmoqchiman." },
                 { v: 'theory', l: "Ajoyib professorning soyasi bo'lishga va chuqur nazariy ma'ruzada qatnashishga ruxsat bering." },
@@ -220,7 +220,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'studyStyle',
-            q: "Qanday usulda o'qishni afzal ko'rasiz?",
+            q: "Siz qanday o‘qishni afzal ko‘rasiz?",
             o: [
                 { v: 'group', l: "Guruhda, boshqalar bilan fikr almashish." },
                 { v: 'solo', l: "Yolg'iz, chuqur diqqat bilan va chalg'itadigan narsalarsiz." },
@@ -229,18 +229,18 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'environment',
-            q: "Sizningcha, qanday universitet muhitida siz muvaffaqiyat qozonasiz?",
+            q: "Sizningcha, qanday universitet muhitida muvaffaqiyatga erishingiz mumkin?",
             o: [
-                { v: 'modern', l: "'Shisha va po'lat'dan yasalgan zamonaviy kampus. Xalqaro, tez sur'atli va texnologiyaga yo'naltirilgan." },
-                { v: 'traditional', l: "Tarixga ega bo'lgan katta, an'anaviy kampus. Katta kutubxonalar va 'klassik' muhit." },
-                { v: 'community', l: "Kichikroq, ahil jamoa. Professorlarimni taniydigan 'biznes maktabi'ga o'xshaydi." }
+                { v: 'modern', l: "Zamonaviy kampus. Xalqaro, tez sur'atli va texnologiyaga yo'naltirilgan." },
+                { v: 'traditional', l: "Tarixga ega bo'lgan katta, an'anaviy kampus. Katta kutubxonalar va klassik muhit." },
+                { v: 'community', l: "Kichikroq, ahil jamoa. Professorlarimni taniydigan, biznes maktabga o'xshaydigan." }
             ]
         },
         {
             id: 'certainty',
-            q: "Kelajakdagi mutaxassisligingizga qanchalik ishonchingiz komil?",
+            q: "Kelajakdagi mutaxassisligingiz qanchalik aniq?",
             o: [
-                { v: 'certain', l: "100% ishonaman. Men nima qilishni aniq bilaman." },
+                { v: 'certain', l: "100% aniq. Men nima qilishni bilaman." },
                 { v: 'exploring', l: "Menda bir nechta g'oyalar bor, lekin men yangi narsalarni o'rganishga ochiqman." },
                 { v: 'clueless', l: "Rostini aytsam, hech qanday tasavvurga ega emasman. Variantlarni ko'rishim kerak." } // <-- Fixed typo here
             ]
@@ -248,16 +248,16 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         // --- NEW QUESTIONS START HERE ---
         {
             id: 'problemSolving',
-            q: "Haqiqatan ham qiyin muammoga duch kelganingizda, birinchi reaksiyangiz qanday bo'ladi?",
+            q: "Qiyin muammoga duch kelganingizda, birinchi reaksiyangiz qanday bo'ladi?",
             o: [
                 { v: 'analytical', l: "Uni kichik, mantiqiy bosqichlarga bo'lib, ma'lumotlarni tahlil qilaman." },
-                { v: 'creative', l: "Noodatiy, yangi g'oyalar uchun 'aqliy hujum' qilaman va yangi narsani sinab ko'raman." },
+                { v: 'creative', l: "Noodatiy, yangi g'oyalar uchun aqliy hujum qilaman va yangi narsani sinab ko'raman." },
                 { v: 'collaborative', l: "Do'stimdan yoki ustozimdan fikrini so'rayman va birga ishlayman." }
             ]
         },
         {
             id: 'pace',
-            q: "Qanday ish sur'atini afzal ko'rasiz?",
+            q: "Siz qanday ish tempini afzal ko‘rasiz?",
             o: [
                 { v: 'fast', l: "Yuqori energiyali va tez sur'atli, aniq muddatlar va bosim bilan." },
                 { v: 'steady', l: "Xotirjam va barqaror. Men shoshilmasdan, to'g'ri bajarishni yoqtiraman." },
@@ -266,7 +266,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         },
         {
             id: 'motivation',
-            q: "Kelajakdagi martabangiz uchun qaysi biri muhimroq motivator?",
+            q: "Kelajakdagi karyerangiz uchun qaysi biri muhimroq?",
             o: [
                 { v: 'prestige', l: "Obro'-e'tibor, yuqori maosh va aniq o'sish yo'li." },
                 { v: 'fulfillment', l: "Shaxsiy qoniqish va dunyoga ijobiy ta'sir ko'rsatish." },
@@ -285,7 +285,7 @@ export const quizQuestionsData: Record<Lang, Question[]> = {
         // --- NEW QUESTIONS END HERE ---
         {
             id: 'field',
-            q: "Va nihoyat, qaysi umumiy sohaga ko'proq qiziqasiz?",
+            q: "Nihoyat, siz qaysi umumiy yo‘nalishga engashyapsiz?",
             o: [
                 { v: 'tech', l: "Texnologiya va muhandislik" },
                 { v: 'business', l: "Biznes va moliya" },

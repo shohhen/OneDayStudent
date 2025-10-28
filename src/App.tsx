@@ -87,7 +87,7 @@ function App() {
         });
 
         const sortedUniIds = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-        const topTwoIds = sortedUniIds.slice(0, 2);
+        const topTwoIds = sortedUniIds.slice(0, 3);
 
         const finalRecommendations = topTwoIds
             .map(id => universities.find(uni => uni.id === id))
