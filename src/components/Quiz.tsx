@@ -16,30 +16,34 @@ export const Quiz: React.FC<QuizProps> = ({
                                               currentQuestionIndex = 0,
                                               totalQuestions = 5
                                           }) => {
-    const {updateAnswer} = useQuizContext();
-    const [selected, setSelected] = useState<string | null>(null);
+    const { answers } = useQuizContext();
     const [animationState, setAnimationState] = useState('animate-enter');
 
-    // Calculate progress percentage
+    // This is the key change:
+    // We use a local state `selection` for immediate UI feedback.
+    // It's initialized from the context but can be updated instantly.
+    const [selection, setSelection] = useState<string | null>(null);
+
+    // This effect syncs the local selection state with the context.
+    // This is crucial for when the user navigates back and forth.
+    useEffect(() => {
+        setSelection(answers[question.id] || null);
+        setAnimationState('animate-enter');
+    }, [question.id, answers]);
+
     const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
-    // Reset on question change
-    useEffect(() => {
-        setSelected(null);
-        setAnimationState('animate-enter');
-    }, [question.id]);
-
     const handleAnswer = (value: string) => {
-        if (selected) return; // Prevent multiple clicks
+        // If a selection has already been made (either from context or this render), do nothing.
+        if (selection) return;
 
-        setSelected(value);
-        // Start exit animation
+        // 1. Provide immediate visual feedback by setting the local state.
+        setSelection(value);
+
+        // 2. Start the exit animation.
         setAnimationState('animate-exit');
 
-        // Save answer to context
-        updateAnswer(question.id, value);
-
-        // Wait for exit animation to complete before notifying parent
+        // 3. After the animation, notify the parent to save the state and move on.
         setTimeout(() => {
             onAnswer(question.id, value);
         }, 400);
@@ -55,14 +59,16 @@ export const Quiz: React.FC<QuizProps> = ({
                         <MouseTrackingCard
                             key={option.v}
                             className={`
-                            p-4 sm:p-6
-                            transition-all duration-300
-                            ${selected === option.v ? 'active transform scale-105' : ''}
-                            ${selected && selected !== option.v ? 'opacity-40 scale-95' : ''}
-                            cursor-pointer
-                        `}
-                            onClick={() => !selected && handleAnswer(option.v)}
-                            disabled={!!selected}
+                                p-4 sm:p-6
+                                transition-all duration-300
+                                // Use the immediate 'selection' state for styling
+                                ${selection === option.v ? 'active transform scale-105' : ''}
+                                ${selection && selection !== option.v ? 'opacity-40 scale-95' : ''}
+                                cursor-pointer
+                            `}
+                            onClick={() => handleAnswer(option.v)}
+                            // Disable the card if an answer has been selected.
+                            disabled={!!selection}
                         >
                             <span className="relative z-2 text-sm sm:text-base">{option.l}</span>
                         </MouseTrackingCard>
@@ -75,7 +81,6 @@ export const Quiz: React.FC<QuizProps> = ({
                     {currentQuestionIndex + 1}/{totalQuestions}
                 </div>
 
-                {/* Fixed progress bar with explicit styles */}
                 <div
                     className="relative w-full max-w-md mx-auto h-1.5 sm:h-2 bg-gray-300 bg-opacity-30 rounded-full overflow-hidden">
                     <div

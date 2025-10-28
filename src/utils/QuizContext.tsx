@@ -4,6 +4,7 @@ interface QuizContextType {
     answers: Record<string, string>;
     updateAnswer: (questionId: string, answer: string) => void;
     resetAnswers: () => void;
+    removeAnswer: (questionId: string) => void;
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -17,9 +18,7 @@ export const useQuizContext = () => {
 };
 
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Initialize state from localStorage if available
     const [answers, setAnswers] = useState<Record<string, string>>(() => {
-        // Check if we're in a browser environment first (for SSR compatibility)
         if (typeof window !== 'undefined') {
             const savedAnswers = localStorage.getItem('quizAnswers');
             return savedAnswers ? JSON.parse(savedAnswers) : {};
@@ -27,9 +26,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return {};
     });
 
-    // Save to localStorage whenever answers change
     useEffect(() => {
-        // Check if we're in a browser environment first
         if (typeof window !== 'undefined') {
             localStorage.setItem('quizAnswers', JSON.stringify(answers));
         }
@@ -42,12 +39,25 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const resetAnswers = () => {
         setAnswers({});
         if (typeof window !== 'undefined') {
+            // Also clear other related items for a full reset
             localStorage.removeItem('quizAnswers');
+            localStorage.removeItem('currentQuestionIndex');
+            localStorage.removeItem('appState');
+            localStorage.removeItem('recommendations');
         }
     };
 
+    const removeAnswer = (questionId: string) => {
+        setAnswers(prev => {
+            const newAnswers = { ...prev };
+            delete newAnswers[questionId];
+            // The useEffect hook will handle updating localStorage
+            return newAnswers;
+        });
+    };
+
     return (
-        <QuizContext.Provider value={{ answers, updateAnswer, resetAnswers }}>
+        <QuizContext.Provider value={{ answers, updateAnswer, resetAnswers, removeAnswer }}>
             {children}
         </QuizContext.Provider>
     );

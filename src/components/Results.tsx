@@ -37,6 +37,7 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!name || !contact) {
             return setError(t.formError);
         }
@@ -53,15 +54,12 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
         setIsSubmitting(true);
         setError('');
 
-        // Format current date and time as UTC - YYYY-MM-DD HH:MM:SS
         const now = new Date();
         const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
 
         try {
-            // Format the answers as a JSON string
             const answersString = JSON.stringify(answers);
 
-            // Create form data object for submission
             const formData = new URLSearchParams();
             formData.append(GOOGLE_FORM_FIELDS.name, name);
             formData.append(GOOGLE_FORM_FIELDS.contact, contact);
@@ -70,7 +68,6 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
             formData.append(GOOGLE_FORM_FIELDS.consent, consent ? 'Yes' : 'No');
             formData.append(GOOGLE_FORM_FIELDS.timestamp, timestamp);
 
-            // Send the request using POST method
             await fetch(GOOGLE_FORM_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -80,9 +77,25 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
                 body: formData,
             });
 
-            // Google Form submissions with no-cors mode don't return a response we can check
-            // So we assume success and handle the completion
+            // Clear all localStorage related to quiz after successful submission
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('appState');
+                localStorage.removeItem('currentQuestionIndex');
+                localStorage.removeItem('appAnswers');
+                localStorage.removeItem('recommendations');
+                localStorage.removeItem('quizAnswers');
+                localStorage.removeItem('quizState');
+            }
+
             resetAnswers();
+
+            setName('');
+            setContact('');
+            setConsent(false);
+            setSelectedUni(null);
+            setShowForm(false);
+            setIsSubmitting(false);
+
             onConfirm();
         } catch (error) {
             console.error('Form Submission Error:', error);
@@ -147,14 +160,22 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
                    dangerouslySetInnerHTML={{__html: t.reserveSubtitle.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}}/>
 
                 <form onSubmit={handleSubmit} className="mt-6 max-w-sm mx-auto animate-enter">
-                    <input type="text" placeholder={t.yourName} value={name}
-                           onChange={(e) => setName(e.target.value)}
-                           className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
-                           disabled={isSubmitting}/>
-                    <input type="text" placeholder={t.yourContact} value={contact}
-                           onChange={(e) => setContact(e.target.value)}
-                           className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
-                           disabled={isSubmitting}/>
+                    <input
+                        type="text"
+                        placeholder={t.yourName}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
+                        disabled={isSubmitting}
+                    />
+                    <input
+                        type="text"
+                        placeholder={t.yourContact}
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-md mb-4 bg-background/80 focus:ring-2 focus:ring-primary outline-none"
+                        disabled={isSubmitting}
+                    />
 
                     {/* Consent checkbox with Tailwind classes */}
                     <div className="flex items-start mb-4 p-3 bg-white/10 border border-white/20 rounded-md">
@@ -172,8 +193,14 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
                         </label>
                     </div>
 
-                    <Button type="submit" onClick={() => {}} className="w-full"
-                            disabled={isSubmitting}>{isSubmitting ? t.submittingButton : t.submitButton}</Button>
+                    <Button
+                        type="submit"
+                        onClick={() => {}}
+                        className="w-full"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? t.submittingButton : t.submitButton}
+                    </Button>
                     {error && <p className="text-destructive text-xs sm:text-sm mt-2 text-center">{error}</p>}
                     <p className="text-xs text-muted-foreground text-center mt-3">{t.formFinePrint}</p>
                 </form>

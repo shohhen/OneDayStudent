@@ -11,68 +11,123 @@ import {Results} from './components/Results';
 import {ThankYou} from './components/ThankYou';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {MouseFollower} from './utils/mouseEffect.tsx';
-import {QuizProvider} from './utils/QuizContext.tsx';
+import {QuizProvider, useQuizContext} from './utils/QuizContext.tsx';
 import {FaTelegram} from 'react-icons/fa';
 
-function App() {
+function AppContent() {
     const [lang, setLang] = useState<Lang>('uz');
-    const [appState, setAppState] = useState<AppState>('hero');
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-    const [answers, setAnswers] = useState<Answers>({});
-    const [recommendations, setRecommendations] = useState<University[]>([]);
+    const [appState, setAppState] = useState<AppState>(() => {
+        if (typeof window !== 'undefined') {
+            const savedAppState = localStorage.getItem('appState');
+            return (savedAppState as AppState) || 'hero';
+        }
+        return 'hero';
+    });
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('currentQuestionIndex');
+            return saved ? parseInt(saved, 10) : 0;
+        }
+        return 0;
+    });
+    const [recommendations, setRecommendations] = useState<University[]>(() => {
+        if (typeof window !== 'undefined') {
+            const savedRecommendations = localStorage.getItem('recommendations');
+            return savedRecommendations ? JSON.parse(savedRecommendations) : [];
+        }
+        return [];
+    });
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
-    // Detect if device is mobile
+    const { answers, updateAnswer, removeAnswer, resetAnswers } = useQuizContext();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && appState !== 'thanks') {
+            localStorage.setItem('appState', appState);
+        }
+    }, [appState]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+        }
+    }, [currentQuestionIndex]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('recommendations', JSON.stringify(recommendations));
+        }
+    }, [recommendations]);
+
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
-
-        // Initial check
         checkMobile();
-
-        // Add event listener for window resize
         window.addEventListener('resize', checkMobile);
-
-        // Clean up
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
+
+    useEffect(() => {
+        if (appState === 'calculating') {
+            const timer = setTimeout(() => {
+                calculateResults(answers);
+                setAppState('results');
+            }, 2500);
+            return () => clearTimeout(timer);
+        }
+    }, [appState, answers]);
+
+    useEffect(() => {
+        if (appState === 'thanks') {
+            resetAnswers();
+        }
+    }, [appState, resetAnswers]);
+
 
     const t = translations[lang];
     const quizQuestions = quizQuestionsData[lang];
     const universities = universitiesData[lang];
 
-    // Handle going to previous question or state
+    // --- THIS IS THE FINAL CORRECTED LOGIC ---
     const handleGoBack = () => {
-        // If in results, go back to the last quiz question
+        // From results, go back to the last question.
         if (appState === 'results') {
             setAppState('quiz');
             setCurrentQuestionIndex(quizQuestions.length - 1);
             return;
         }
 
-        // If in quiz, go to previous question or hero
+        // During the quiz
         if (appState === 'quiz') {
+            // If we are on any question other than the first one
             if (currentQuestionIndex > 0) {
-                setCurrentQuestionIndex(currentQuestionIndex - 1);
+                // This is the logic you want:
+                // 1. Determine the PREVIOUS question we are going to.
+                const previousQuestionIndex = currentQuestionIndex - 1;
+                const questionToClear = quizQuestions[previousQuestionIndex];
+
+                // 2. Remove the answer for that PREVIOUS question.
+                if (questionToClear) {
+                    removeAnswer(questionToClear.id);
+                }
+
+                // 3. Go to the PREVIOUS question.
+                setCurrentQuestionIndex(previousQuestionIndex);
             } else {
+                // If on the first question, go back to the hero screen.
                 setAppState('hero');
             }
         }
     };
 
     const handleAnswer = (questionId: string, answer: string) => {
-        const newAnswers = {...answers, [questionId]: answer};
-        setAnswers(newAnswers);
+        updateAnswer(questionId, answer);
 
         if (currentQuestionIndex < quizQuestions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
             setAppState('calculating');
-            setTimeout(() => {
-                calculateResults(newAnswers);
-                setAppState('results');
-            }, 2500);
         }
     };
 
@@ -84,15 +139,17 @@ function App() {
             uni.tags.forEach(tag => {
                 if (Object.values(finalAnswers).includes(tag)) scores[uni.id]++;
             });
-            if (uni.tags.includes(finalAnswers.field)) scores[uni.id] += 2;
+            if (finalAnswers.field && uni.tags.includes(finalAnswers.field)) {
+                scores[uni.id] += 2;
+            }
         });
 
         const sortedUniIds = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-        const topTwoIds = sortedUniIds.slice(0, 3);
+        const topThreeIds = sortedUniIds.slice(0, 3);
 
-        const finalRecommendations = topTwoIds
+        const finalRecommendations = topThreeIds
             .map(id => universities.find(uni => uni.id === id))
-            .filter((u): u is University => u !== undefined); // Type guard to filter out undefined
+            .filter((u): u is University => u !== undefined);
         setRecommendations(finalRecommendations);
     };
 
@@ -120,71 +177,65 @@ function App() {
         }
     };
 
-    // Check if we should show the back button in header
-    // Show in both quiz and results screens
     const showBackButton = appState === 'quiz' || appState === 'results';
 
     return (
-        <QuizProvider>
-            <div className="flex flex-col min-h-screen relative overflow-x-hidden">
-                {/* Only show MouseFollower on non-mobile devices */}
-                {!isMobile && <MouseFollower/>}
-
-                {/* Background blobs */}
-                <div className="shape-blob one"></div>
-                <div className="shape-blob two"></div>
-                <div className="shape-blob three"></div>
-
-                {/* Fixed Header with Tailwind classes */}
-                <header
-                    className="fixed top-0 left-0 right-0 z-50 bg-[#121a29]/80 backdrop-blur border-b border-white/10">
-                    <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
-                        <div className="flex items-center">
-                            {/* Back Button - shown during quiz and results */}
-                            {showBackButton && (
-                                <button
-                                    onClick={handleGoBack}
-                                    className="mr-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                                    aria-label="Back"
-                                >
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                              d="M15 19l-7-7 7-7"/>
-                                    </svg>
-                                </button>
-                            )}
-                            <h1 className="text-lg sm:text-xl font-bold text-primary">{t.headerTitle}</h1>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <LanguageSwitcher lang={lang} setLang={setLang}/>
-                            <a
-                                href="https://t.me/shohhen"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-blue-400"
-                                aria-label="Telegram"
+        <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+            {!isMobile && <MouseFollower/>}
+            <div className="shape-blob one"></div>
+            <div className="shape-blob two"></div>
+            <div className="shape-blob three"></div>
+            <header
+                className="fixed top-0 left-0 right-0 z-50 bg-[#121a29]/80 backdrop-blur border-b border-white/10">
+                <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
+                    <div className="flex items-center">
+                        {showBackButton && (
+                            <button
+                                onClick={handleGoBack}
+                                className="mr-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                                aria-label="Back"
                             >
-                                <FaTelegram size={35}/>
-                            </a>
-                        </div>
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor"
+                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                          d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </button>
+                        )}
+                        <h1 className="text-lg sm:text-xl font-bold text-primary">{t.headerTitle}</h1>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <LanguageSwitcher lang={lang} setLang={setLang}/>
+                        <a
+                            href="https://t.me/shohhen"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-blue-400"
+                            aria-label="Telegram"
+                        >
+                            <FaTelegram size={35}/>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <main className="flex-1 flex items-center justify-center w-full pt-20 pb-6 px-4">
+                <div className="w-full max-w-7xl">
+                    {renderContent()}
+                </div>
+            </main>
+            <footer className="w-full text-center py-4 text-sm text-white/60">
+                <div className="flex items-center flex-col justify-center gap-4">
+                    <span>&copy; {new Date().getFullYear()} BirKunTalaba. {t.footerText}</span>
+                </div>
+            </footer>
+        </div>
+    );
+}
 
-                    </div>
-                </header>
-
-                {/* Content area with padding for header */}
-                <main className="flex-1 flex items-center justify-center w-full pt-20 pb-6 px-4">
-                    <div className="w-full max-w-7xl">
-                        {renderContent()}
-                    </div>
-                </main>
-                {/* Footer */}
-                <footer className="w-full text-center py-4 text-sm text-white/60">
-                    <div className="flex items-center flex-col justify-center gap-4">
-                        <span>&copy; {new Date().getFullYear()} BirKunTalaba. {t.footerText}</span>
-                    </div>
-                </footer>
-            </div>
+function App() {
+    return (
+        <QuizProvider>
+            <AppContent />
         </QuizProvider>
     );
 }
