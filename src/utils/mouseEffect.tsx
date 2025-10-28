@@ -1,44 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// Custom hook to track mouse position globally
-export const useMousePosition = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+// Mouse follower component - Optimized for performance
+export const MouseFollower: React.FC = () => {
+    const followerRef = useRef<HTMLDivElement>(null);
+    const [clicks, setClicks] = useState<{id: number, x: number, y: number}[]>([]);
+    const nextId = useRef(0);
+    const followerSize = 128; // Half of the actual size (256px)
 
     useEffect(() => {
+        const follower = followerRef.current;
+        if (!follower) return;
+
+        let animationFrameId: number;
+        let lastX = 0, lastY = 0;
+
         const updateMousePosition = (ev: MouseEvent) => {
-            setMousePosition({ x: ev.clientX, y: ev.clientY });
+            lastX = ev.clientX;
+            lastY = ev.clientY;
+
+            // Cancel any pending animation frame to avoid multiple updates
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+
+            // Schedule the DOM update within an animation frame for smoothness
+            animationFrameId = requestAnimationFrame(() => {
+                follower.style.transform = `translate3d(${lastX - followerSize}px, ${lastY - followerSize}px, 0)`;
+            });
         };
 
         window.addEventListener('mousemove', updateMousePosition);
 
         return () => {
             window.removeEventListener('mousemove', updateMousePosition);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
         };
-    }, []);
-
-    return mousePosition;
-};
-
-// Mouse follower component
-export const MouseFollower: React.FC = () => {
-    const mousePosition = useMousePosition();
-    const [clicks, setClicks] = useState<{id: number, x: number, y: number}[]>([]);
-    const nextId = useRef(0);
-    const followerSize = 128; // Half of the actual size (256px)
+    }, []); // Empty dependency array ensures this runs only once
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
-            // Create a new click with unique ID
             const clickId = nextId.current++;
-            const newClick = {
-                id: clickId,
-                x: e.clientX,
-                y: e.clientY
-            };
-
+            const newClick = { id: clickId, x: e.clientX, y: e.clientY };
             setClicks(prev => [...prev, newClick]);
 
-            // Remove this click after animation completes
             setTimeout(() => {
                 setClicks(prev => prev.filter(click => click.id !== clickId));
             }, 700);
@@ -50,17 +56,17 @@ export const MouseFollower: React.FC = () => {
 
     return (
         <>
-            {/* Main cursor light effect - properly centered on cursor */}
+            {/* Main cursor light effect - now using transform for performance */}
             <div
+                ref={followerRef}
                 className="pointer-events-none fixed z-10 rounded-full opacity-20 mix-blend-overlay"
                 style={{
-                    width: followerSize * 2 + 'px',
-                    height: followerSize * 2 + 'px',
+                    width: `${followerSize * 2}px`,
+                    height: `${followerSize * 2}px`,
                     background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
-                    position: 'fixed',
-                    left: mousePosition.x - followerSize + 'px',
-                    top: mousePosition.y - followerSize + 'px',
-                    transition: 'left 0.05s ease-out, top 0.05s ease-out', // Faster tracking
+                    top: 0,
+                    left: 0,
+                    willChange: 'transform', // Hint to the browser for optimization
                 }}
             />
 
@@ -74,8 +80,8 @@ export const MouseFollower: React.FC = () => {
                         height: '64px',
                         background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%)',
                         position: 'fixed',
-                        left: click.x - 32 + 'px',
-                        top: click.y - 32 + 'px',
+                        left: `${click.x - 32}px`,
+                        top: `${click.y - 32}px`,
                     }}
                 />
             ))}
