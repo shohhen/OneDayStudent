@@ -13,6 +13,7 @@ import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {MouseFollower} from './utils/mouseEffect.tsx';
 import {QuizProvider, useQuizContext} from './utils/QuizContext.tsx';
 import {FaTelegram} from 'react-icons/fa';
+import image from "./assets/logo.png";
 
 function AppContent() {
     const [lang, setLang] = useState<Lang>('uz');
@@ -89,33 +90,36 @@ function AppContent() {
     const quizQuestions = quizQuestionsData[lang];
     const universities = universitiesData[lang];
 
-    // --- THIS IS THE FINAL CORRECTED LOGIC ---
     const handleGoBack = () => {
-        // From results, go back to the last question.
+        // From results, go back to the last question
         if (appState === 'results') {
+            // 1. Get the last question.
+            const lastQuestionIndex = quizQuestions.length - 1;
+            const lastQuestion = quizQuestions[lastQuestionIndex];
+
+            // 2. Remove the answer for that last question.
+            if (lastQuestion) {
+                removeAnswer(lastQuestion.id);
+            }
+
+            // 3. Go back to the last question.
             setAppState('quiz');
-            setCurrentQuestionIndex(quizQuestions.length - 1);
+            setCurrentQuestionIndex(lastQuestionIndex);
             return;
         }
 
         // During the quiz
         if (appState === 'quiz') {
-            // If we are on any question other than the first one
             if (currentQuestionIndex > 0) {
-                // This is the logic you want:
-                // 1. Determine the PREVIOUS question we are going to.
                 const previousQuestionIndex = currentQuestionIndex - 1;
                 const questionToClear = quizQuestions[previousQuestionIndex];
 
-                // 2. Remove the answer for that PREVIOUS question.
                 if (questionToClear) {
                     removeAnswer(questionToClear.id);
                 }
 
-                // 3. Go to the PREVIOUS question.
                 setCurrentQuestionIndex(previousQuestionIndex);
             } else {
-                // If on the first question, go back to the hero screen.
                 setAppState('hero');
             }
         }
@@ -150,7 +154,7 @@ function AppContent() {
         const finalRecommendations = topThreeIds
             .map(id => universities.find(uni => uni.id === id))
             .filter((u): u is University => u !== undefined);
-        setRecommendations(finalRecommendations);
+        setRecommendations(finalRecommendations.filter(Boolean));
     };
 
     const renderContent = () => {
@@ -177,7 +181,7 @@ function AppContent() {
         }
     };
 
-    const showBackButton = appState === 'quiz' || appState === 'results';
+    const showBackButton = appState === 'quiz' || appState === 'results' || appState === 'calculating';
 
     return (
         <div className="flex flex-col min-h-screen relative overflow-x-hidden">
@@ -202,7 +206,8 @@ function AppContent() {
                                 </svg>
                             </button>
                         )}
-                        <h1 className="text-lg sm:text-xl font-bold text-primary">{t.headerTitle}</h1>
+                        <img src={image} alt="Logo" className="w-11 h-11 mr-3"/>
+                        {!isMobile && <h1 className="text-lg sm:text-xl font-bold text-primary">{t.headerTitle}</h1>}
                     </div>
                     <div className="flex items-center gap-4">
                         <LanguageSwitcher lang={lang} setLang={setLang}/>
