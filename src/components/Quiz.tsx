@@ -70,7 +70,7 @@ export const Quiz: React.FC<QuizProps> = ({
                 </div>
             </div>
             {/* Question progress indicator */}
-            <div className="mt-8 sm:mt-16 text-center fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 max-w-md">
+            <div className="mt-8 sm:mt-16 text-center fixed bottom-14 left-1/2 transform -translate-x-1/2 w-full px-4 max-w-md">
                 <div className="text-xs sm:text-sm text-white mb-3">
                     {currentQuestionIndex + 1}/{totalQuestions}
                 </div>

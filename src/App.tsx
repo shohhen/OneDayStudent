@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import type {Answers, AppState, Lang, University} from './types';
 import {translations} from './data/i18n';
 import {quizQuestionsData} from './data/questions';
@@ -12,6 +12,7 @@ import {ThankYou} from './components/ThankYou';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {MouseFollower} from './utils/mouseEffect.tsx';
 import {QuizProvider} from './utils/QuizContext.tsx';
+import {FaTelegram} from 'react-icons/fa';
 
 function App() {
     const [lang, setLang] = useState<Lang>('uz');
@@ -127,7 +128,7 @@ function App() {
         <QuizProvider>
             <div className="flex flex-col min-h-screen relative overflow-x-hidden">
                 {/* Only show MouseFollower on non-mobile devices */}
-                {!isMobile && <MouseFollower />}
+                {!isMobile && <MouseFollower/>}
 
                 {/* Background blobs */}
                 <div className="shape-blob one"></div>
@@ -135,7 +136,8 @@ function App() {
                 <div className="shape-blob three"></div>
 
                 {/* Fixed Header with Tailwind classes */}
-                <header className="fixed top-0 left-0 right-0 z-50 bg-[#121a29]/80 backdrop-blur border-b border-white/10">
+                <header
+                    className="fixed top-0 left-0 right-0 z-50 bg-[#121a29]/80 backdrop-blur border-b border-white/10">
                     <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
                         <div className="flex items-center">
                             {/* Back Button - shown during quiz and results */}
@@ -145,14 +147,28 @@ function App() {
                                     className="mr-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                                     aria-label="Back"
                                 >
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor"
+                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                              d="M15 19l-7-7 7-7"/>
                                     </svg>
                                 </button>
                             )}
                             <h1 className="text-lg sm:text-xl font-bold text-primary">{t.headerTitle}</h1>
                         </div>
-                        <LanguageSwitcher lang={lang} setLang={setLang} />
+                        <div className="flex items-center gap-4">
+                            <LanguageSwitcher lang={lang} setLang={setLang}/>
+                            <a
+                                href="https://t.me/shohhen"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-blue-400"
+                                aria-label="Telegram"
+                            >
+                                <FaTelegram size={35}/>
+                            </a>
+                        </div>
+
                     </div>
                 </header>
 
@@ -162,6 +178,12 @@ function App() {
                         {renderContent()}
                     </div>
                 </main>
+                {/* Footer */}
+                <footer className="w-full text-center py-4 text-sm text-white/60">
+                    <div className="flex items-center flex-col justify-center gap-4">
+                        <span>&copy; {new Date().getFullYear()} BirKunTalaba. {t.footerText}</span>
+                    </div>
+                </footer>
             </div>
         </QuizProvider>
     );
