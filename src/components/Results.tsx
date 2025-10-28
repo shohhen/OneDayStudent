@@ -134,7 +134,7 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
 
     // STEP 2: Registration Form View
     const renderRegistrationForm = () => (
-        <div className="animate-enter max-w-4xl mx-auto px-3 pt-6 w-full">
+        <div className=" max-w-4xl mx-auto px-3 pt-6 w-full">
             <div className="flex items-center mb-6">
                 <button
                     onClick={handleBack}
@@ -159,7 +159,7 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
                 <p className="text-center text-muted-foreground mt-2 text-sm"
                    dangerouslySetInnerHTML={{__html: t.reserveSubtitle.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}}/>
 
-                <form onSubmit={handleSubmit} className="mt-6 max-w-sm mx-auto animate-enter">
+                <form onSubmit={handleSubmit} className="mt-6 max-w-sm mx-auto">
                     <input
                         type="text"
                         placeholder={t.yourName}
@@ -184,11 +184,13 @@ export const Results: React.FC<ResultsProps> = ({ recommendations, onConfirm, t 
                             id="consent"
                             checked={consent}
                             onChange={(e) => setConsent(e.target.checked)}
-                            className="w-5 h-5 mt-0.5 mr-2 rounded border-gray-400 text-primary focus:ring-primary"
-                            style={{appearance: 'checkbox', opacity: 1}}
+                            className="appearance-none w-6 h-6 rounded-full border-2 border-gray-400 bg-white
+                                       checked:bg-primary checked:border-transparent
+                                       focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+                                       disabled:opacity-50"
                             disabled={isSubmitting}
                         />
-                        <label htmlFor="consent" className="text-xs sm:text-sm leading-tight">
+                        <label htmlFor="consent" className="text-xs sm:text-sm pl-2 leading-tight">
                             {t.consentText || "I agree to be contacted about this university recommendation."}
                         </label>
                     </div>

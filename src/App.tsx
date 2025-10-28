@@ -191,7 +191,7 @@ function AppContent() {
             <div className="shape-blob three"></div>
             <header
                 className="fixed top-0 left-0 right-0 z-50 bg-[#121a29]/80 backdrop-blur border-b border-white/10">
-                <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
+                <div className={`flex justify-between items-center max-w-7xl mx-auto ${isMobile ? 'p-2' : 'p-4'}`}>
                     <div className="flex items-center">
                         {showBackButton && (
                             <button
@@ -223,12 +223,12 @@ function AppContent() {
                     </div>
                 </div>
             </header>
-            <main className="flex-1 flex items-center justify-center w-full pt-20 pb-6 px-4">
+            <main className={`flex-1 flex items-center justify-center w-full ${isMobile ? 'pt-16 pb-2 px-2' : 'pt-20 pb-6 px-4'}`}>
                 <div className="w-full max-w-7xl">
                     {renderContent()}
                 </div>
             </main>
-            <footer className="w-full text-center py-4 text-sm text-white/60">
+            <footer className={`w-full text-center text-sm text-white/60 ${isMobile ? 'py-2' : 'py-4'}`}>
                 <div className="flex items-center flex-col justify-center gap-4">
                     <span>&copy; {new Date().getFullYear()} BirKunTalaba. {t.footerText}</span>
                 </div>
