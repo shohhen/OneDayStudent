@@ -26,7 +26,7 @@ export const translations: Record<Lang, TranslationSet> = {
         headerTitle: "One Day Student",
         consentText: "I agree to be contacted about this university recommendation.",
         consentError: "Please provide your consent to proceed with your application.",
-        clickToSelect: "Click on a university to reserve your spot",
+        clickToSelect: "Choose a university to reserve your spot",
         backButton: "Back to recommendations",
     },
     ru: {
