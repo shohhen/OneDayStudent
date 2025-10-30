@@ -2,8 +2,18 @@ export type AppState = 'hero' | 'quiz' | 'calculating' | 'results' | 'thanks';
 export type Lang = 'en' | 'ru' | 'uz';
 export type Answers = Record<string, string>;
 
+export interface SeoTranslations {
+    homeTitle: string;
+    homeDescription: string;
+    quizTitle: string;
+    quizDescription: string;
+    resultsTitle: string;
+    resultsDescription: string;
+}
+
 export interface TranslationSet {
-    [key: string]: string;
+    [key: string]: string | SeoTranslations | undefined;
+    seo?: SeoTranslations;
 }
 
 export interface QuestionOption {

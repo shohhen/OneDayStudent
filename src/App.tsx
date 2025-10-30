@@ -14,6 +14,46 @@ import {MouseFollower} from './utils/mouseEffect.tsx';
 import {QuizProvider, useQuizContext} from './utils/QuizContext.tsx';
 import {FaTelegram} from 'react-icons/fa';
 import image from "./assets/logo.png";
+import { Helmet } from 'react-helmet-async';
+
+// New SEO Component
+function SeoUpdater({ appState, lang, t }: { appState: AppState, lang: Lang, t: any }) {
+    const getPageMeta = () => {
+        switch (appState) {
+            case 'quiz':
+                return {
+                    title: t.seo.quizTitle,
+                    description: t.seo.quizDescription,
+                };
+            case 'results':
+                return {
+                    title: t.seo.resultsTitle,
+                    description: t.seo.resultsDescription,
+                };
+            case 'hero':
+            default:
+                return {
+                    title: t.seo.homeTitle,
+                    description: t.seo.homeDescription,
+                };
+        }
+    };
+
+    const { title, description } = getPageMeta();
+
+    return (
+        <Helmet>
+            <html lang={lang} />
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="twitter:title" content={title} />
+            <meta property="twitter:description" content={description} />
+        </Helmet>
+    );
+}
+
 
 function AppContent() {
     const [lang, setLang] = useState<Lang>('uz');
@@ -185,6 +225,7 @@ function AppContent() {
 
     return (
         <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+            <SeoUpdater appState={appState} lang={lang} t={t} />
             {!isMobile && <MouseFollower/>}
             <div className="shape-blob one"></div>
             <div className="shape-blob two"></div>
