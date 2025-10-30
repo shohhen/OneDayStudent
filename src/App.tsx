@@ -14,46 +14,7 @@ import {MouseFollower} from './utils/mouseEffect.tsx';
 import {QuizProvider, useQuizContext} from './utils/QuizContext.tsx';
 import {FaTelegram} from 'react-icons/fa';
 import image from "./assets/logo.png";
-import { Helmet } from 'react-helmet-async';
-
-// New SEO Component
-function SeoUpdater({ appState, lang, t }: { appState: AppState, lang: Lang, t: any }) {
-    const getPageMeta = () => {
-        switch (appState) {
-            case 'quiz':
-                return {
-                    title: t.seo.quizTitle,
-                    description: t.seo.quizDescription,
-                };
-            case 'results':
-                return {
-                    title: t.seo.resultsTitle,
-                    description: t.seo.resultsDescription,
-                };
-            case 'hero':
-            default:
-                return {
-                    title: t.seo.homeTitle,
-                    description: t.seo.homeDescription,
-                };
-        }
-    };
-
-    const { title, description } = getPageMeta();
-
-    return (
-        <Helmet>
-            <html lang={lang} />
-            <title>{title}</title>
-            <meta name="description" content={description} />
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            <meta property="twitter:title" content={title} />
-            <meta property="twitter:description" content={description} />
-        </Helmet>
-    );
-}
-
+import { SeoUpdater } from './components/SeoUpdater'; // Import the new universal component
 
 function AppContent() {
     const [lang, setLang] = useState<Lang>('uz');
@@ -131,33 +92,24 @@ function AppContent() {
     const universities = universitiesData[lang];
 
     const handleGoBack = () => {
-        // From results, go back to the last question
         if (appState === 'results') {
-            // 1. Get the last question.
             const lastQuestionIndex = quizQuestions.length - 1;
             const lastQuestion = quizQuestions[lastQuestionIndex];
-
-            // 2. Remove the answer for that last question.
             if (lastQuestion) {
                 removeAnswer(lastQuestion.id);
             }
-
-            // 3. Go back to the last question.
             setAppState('quiz');
             setCurrentQuestionIndex(lastQuestionIndex);
             return;
         }
 
-        // During the quiz
         if (appState === 'quiz') {
             if (currentQuestionIndex > 0) {
                 const previousQuestionIndex = currentQuestionIndex - 1;
                 const questionToClear = quizQuestions[previousQuestionIndex];
-
                 if (questionToClear) {
                     removeAnswer(questionToClear.id);
                 }
-
                 setCurrentQuestionIndex(previousQuestionIndex);
             } else {
                 setAppState('hero');

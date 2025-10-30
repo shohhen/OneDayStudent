@@ -11,10 +11,12 @@ export interface SeoTranslations {
     resultsDescription: string;
 }
 
-export interface TranslationSet {
-    [key: string]: string | SeoTranslations | undefined;
+
+export type TranslationSet = {
+    [key: string]: string;
+} & {
     seo?: SeoTranslations;
-}
+};
 
 export interface QuestionOption {
     v: string;
