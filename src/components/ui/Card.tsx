@@ -1,14 +1,19 @@
 import React from 'react';
 
-interface CardProps {
-    children: React.ReactNode;
-    className?: string;
-    onClick?: () => void;
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+    // variant 'secondary' теперь добавляет класс 'alt-hover'
+    variant?: 'secondary';
 }
 
-export const Card: React.FC<CardProps> = ({children, className = '', onClick}) => (
-    <div onClick={onClick}
-         className={`rounded-xl shadow-lg transition-all duration-300 ${onClick ? 'cursor-pointer hover:shadow-2xl hover:-translate-y-2' : ''} ${className}`}>
-        <div className="glass-card rounded-xl p-6 h-full">{children}</div>
-    </div>
-);
+export const Card: React.FC<CardProps> = ({ children, className, variant, ...props }) => {
+    // Новый базовый класс 'card'
+    const baseClass = 'card';
+    // Добавляем 'alt-hover' если variant === 'secondary'
+    const variantClass = variant === 'secondary' ? 'alt-hover' : '';
+
+    return (
+        <div className={`${baseClass} ${variantClass} ${className}`} {...props}>
+            {children}
+        </div>
+    );
+};

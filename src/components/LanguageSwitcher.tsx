@@ -1,13 +1,12 @@
 import React from 'react';
-import type {Lang} from '../types';
+import type { Lang } from '../types';
 
 interface LanguageSwitcherProps {
     lang: Lang;
     setLang: (lang: Lang) => void;
 }
 
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({lang, setLang}) => {
-    // Define all available languages
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ lang, setLang }) => {
     const languages: Record<Lang, string> = {
         uz: "O'z",
         ru: 'Py',
@@ -15,15 +14,18 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({lang, setLang
     };
 
     return (
-        <div className="flex space-x-2">
+        // Используем базовые классы .button и .btn-ghost
+        // Обертка в "бруталистском" стиле
+        <div className="flex bg-transparent border border-border-color">
             {(Object.keys(languages) as Lang[]).map((code) => (
                 <button
                     key={code}
                     onClick={() => setLang(code)}
-                    className={`w-11 h-11 flex items-center justify-center rounded-xl transition-colors
+                    // Убираем !rounded-lg, т.к. border-radius: 0 из .button
+                    className={`button btn-ghost w-11 h-11 
                         ${lang === code
-                        ? 'bg-primary text-white border border-primary'
-                        : 'bg-white/10 text-white/80 border border-white/20 hover:bg-white/15'}`
+                        ? 'text-foreground bg-border-color' // Активный язык
+                        : 'text-muted-foreground'}`
                     }
                     aria-label={`Switch to ${code} language`}
                 >

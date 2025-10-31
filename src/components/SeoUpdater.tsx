@@ -28,7 +28,7 @@ export function SeoUpdater({ appState, lang, t }: { appState: AppState; lang: La
             title = seo.resultsTitle;
             description = seo.resultsDescription;
             break;
-        case 'hero':
+        case 'hook':
         default:
             // Values are already set to home defaults
             break;

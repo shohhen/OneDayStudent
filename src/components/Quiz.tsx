@@ -1,7 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import type {Question} from '../types';
-import {MouseTrackingCard} from './ui/MouseTrackingCard';
-import {useQuizContext} from '../utils/QuizContext';
+import React, { useEffect, useState } from 'react';
+import type { Question } from '../types';
+import { Card } from './ui/Card';
+import { useQuizContext } from '../utils/QuizContext';
+import { motion } from 'framer-motion';
+
+// Конфигурация для появления элементов квиза
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        }
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: "easeOut" }
+    },
+};
 
 interface QuizProps {
     question: Question;
@@ -10,85 +31,69 @@ interface QuizProps {
     totalQuestions?: number;
 }
 
-export const Quiz: React.FC<QuizProps> = ({
-                                              question,
-                                              onAnswer,
-                                              currentQuestionIndex = 0,
-                                              totalQuestions = 5
-                                          }) => {
+export const Quiz: React.FC<QuizProps> = ({ question, onAnswer, currentQuestionIndex = 0, totalQuestions = 10 }) => {
     const { answers } = useQuizContext();
-    const [animationState, setAnimationState] = useState('animate-enter');
-
-    // This is the key change:
-    // We use a local state `selection` for immediate UI feedback.
-    // It's initialized from the context but can be updated instantly.
     const [selection, setSelection] = useState<string | null>(null);
 
-    // This effect syncs the local selection state with the context.
-    // This is crucial for when the user navigates back and forth.
+    // Сброс 'selection' при смене вопроса
     useEffect(() => {
         setSelection(answers[question.id] || null);
-        setAnimationState('animate-enter');
     }, [question.id, answers]);
 
     const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
     const handleAnswer = (value: string) => {
-        // If a selection has already been made (either from context or this render), do nothing.
         if (selection) return;
-
-        // 1. Provide immediate visual feedback by setting the local state.
         setSelection(value);
-
-        // 2. Start the exit animation.
-        setAnimationState('animate-exit');
-
-        // 3. After the animation, notify the parent to save the state and move on.
         setTimeout(() => {
             onAnswer(question.id, value);
-        }, 400);
+        }, 300); // Задержка для "ощущения" нажатия
     };
 
     return (
         <>
-            <div className={`w-full max-w-3xl mx-auto px-3 ${animationState}`}>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-10 text-white">{question.q}</h2>
+            <motion.div
+                className="w-full max-w-4xl mx-auto p-6 pt-32 min-h-screen"
+                key={question.id} // ВАЖНО: Анимируем *каждый* новый вопрос
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            >
+                <motion.h2
+                    variants={itemVariants}
+                    className="section-title text-center mb-16"
+                >
+                    {question.q}
+                </motion.h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-enter">
+                <motion.div
+                    variants={itemVariants}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+                >
                     {question.o.map(option => (
-                        <MouseTrackingCard
+                        <Card
                             key={option.v}
-                            className={`
-                                p-4 sm:p-6
-                                transition-all duration-300
-                                // Use the immediate 'selection' state for styling
-                                ${selection === option.v ? 'active transform scale-105' : ''}
-                                ${selection && selection !== option.v ? 'opacity-40 scale-95' : ''}
-                                cursor-pointer
-                            `}
                             onClick={() => handleAnswer(option.v)}
-                            // Disable the card if an answer has been selected.
-                            disabled={!!selection}
+                            className={`quiz-option p-6 h-full cursor-pointer 
+                                ${selection === option.v ? 'active' : ''}
+                                ${selection && selection !== option.v ? 'inactive' : ''}`}
                         >
-                            <span className="relative z-2 text-sm sm:text-base">{option.l}</span>
-                        </MouseTrackingCard>
+                            <span className="text-xl font-bold uppercase">{option.l}</span>
+                        </Card>
                     ))}
-                </div>
-            </div>
-            {/* Question progress indicator */}
-            <div className="mt-8 sm:mt-16 text-center fixed bottom-14 left-1/2 transform -translate-x-1/2 w-full px-4 max-w-md">
-                <div className="text-xs sm:text-sm text-white mb-3">
-                    {currentQuestionIndex + 1}/{totalQuestions}
-                </div>
+                </motion.div>
+            </motion.div>
 
-                <div
-                    className="relative w-full max-w-md mx-auto h-1.5 sm:h-2 bg-gray-300 bg-opacity-30 rounded-full overflow-hidden">
+            {/* Прогресс-бар */}
+            <div className="fixed bottom-0 left-0 right-0 w-full">
+                <div className="text-sm text-muted-foreground mb-2 text-center p-6">
+                    {currentQuestionIndex + 1} / {totalQuestions}
+                </div>
+                <div className="progress-bar-track w-full">
                     <div
-                        className="absolute top-0 left-0 h-full bg-blue-400"
-                        style={{
-                            width: `${progressPercentage}%`,
-                            transition: "width 0.5s ease-out"
-                        }}
+                        className="progress-bar-fill"
+                        style={{ width: `${progressPercentage}%`, transition: "width 0.5s ease-out" }}
                     ></div>
                 </div>
             </div>
