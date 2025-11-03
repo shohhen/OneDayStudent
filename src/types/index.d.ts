@@ -12,8 +12,34 @@ export interface SeoTranslations {
 }
 
 export type TranslationSet = {
-    [key: string]: string | SeoTranslations;
-    seo?: SeoTranslations;
+    heroTitle: string;
+    heroSubtitle: string;
+    heroButton: string;
+    calculatingTitle: string;
+    calculatingSubtitle: string;
+    resultsTitle: string;
+    resultsSubtitle: string;
+    topMatch: string;
+    reserveTitle: string;
+    reserveSubtitle: string;
+    choosePrompt: string;
+    yourName: string;
+    yourContact: string;
+    submitButton: string;
+    submittingButton: string;
+    formError: string;
+    devError: string;
+    submitError: string;
+    formFinePrint: string;
+    thankYouTitle: string;
+    thankYouSubtitle: string;
+    headerTitle: string;
+    consentText: string;
+    consentError: string;
+    clickToSelect: string;
+    backButton: string;
+    footerText: string;
+    seo: SeoTranslations;
 };
 
 export interface QuestionOption {
