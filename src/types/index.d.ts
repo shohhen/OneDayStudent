@@ -1,4 +1,4 @@
-export type AppState = 'hero' | 'quiz' | 'calculating' | 'results' | 'thanks';
+export type AppState = 'hero' | 'quiz' | 'calculating' | 'gate' | 'results';
 export type Lang = 'en' | 'ru' | 'uz';
 export type Answers = Record<string, string>;
 
@@ -20,12 +20,8 @@ export type TranslationSet = {
     resultsTitle: string;
     resultsSubtitle: string;
     topMatch: string;
-    reserveTitle: string;
-    reserveSubtitle: string;
-    choosePrompt: string;
     yourName: string;
     yourContact: string;
-    submitButton: string;
     submittingButton: string;
     formError: string;
     devError: string;
@@ -40,6 +36,12 @@ export type TranslationSet = {
     backButton: string;
     footerText: string;
     seo: SeoTranslations;
+    gateTitle: string;
+    gateSubtitle: string;
+    gateSubmitButton: string;
+    resultsUpsellTitle: string;
+    resultsUpsellBody: string;
+    resultsTelegramButton: string;
 };
 
 export interface QuestionOption {

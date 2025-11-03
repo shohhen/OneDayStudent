@@ -1,38 +1,48 @@
+// src/data/i18n.ts
+
 import type { Lang, TranslationSet } from '../types';
 
 export const translations: Record<Lang, TranslationSet> = {
     en: {
         heroTitle: "Unsure About Your Future Major?",
         heroSubtitle:
-            "Try it before you choose it. Answer 10 quick questions to get a personalized recommendation to find THE BEST university.",
+            "Answer 10 quick questions and find out which university you can **be a student at for one day**.",
         heroButton: "Find My Perfect University",
+
         calculatingTitle: "Analyzing your profile...",
         calculatingSubtitle: "Crafting your personalized recommendations!",
+
+        // New "Gate" Page Text
+        gateTitle: "Your Recommendations Are Ready!",
+        gateSubtitle: "Register to see your results and to become a **'One Day Student'**.",
+        gateSubmitButton: "SEE RESULTS AND REGISTER",
+
+        // New "Results & Upsell" Page Text
         resultsTitle: "Your Personalized Matches!",
-        resultsSubtitle:
-            "Because of your unique goals and learning style, these are the top universities where you'd thrive as a 'One Day Student'.",
+        resultsSubtitle: "Here are the top universities where you'd thrive based on your answers.",
+        resultsUpsellTitle: "Now, visit these universities in person!",
+        resultsUpsellBody: "Become a **'One Day Student'** for 50,000 UZS. Attend real classes, talk to students, and make the right choice for your next 4 years.",
+        resultsTelegramButton: "RESERVE VIA TELEGRAM",
+
         topMatch: "TOP MATCH",
-        reserveTitle: "Reserve Your Spot!",
-        reserveSubtitle:
-            "Pilot groups are limited. Join the wishlist to receive an invitation.",
-        choosePrompt: "First, choose the university you're most interested in.",
-        yourName: "Your Name",
+        yourName: "Your Full Name",
         yourContact: "Your Telegram or Phone",
-        submitButton: "SECURE MY SPOT NOW",
-        submittingButton: "Securing Spot...",
-        formError: "Please fill out both fields.",
+        submittingButton: "Submitting...",
+        formError: "Please fill out all fields.",
+        consentError: "Please provide your consent to proceed.",
         devError: "The developer needs to set up the Google Sheet URL first!",
         submitError: "Something went wrong. Please try again.",
         formFinePrint:
-            "The fee is 50,000 sum. You'll be first to receive an invitation. Please read the terms and conditions.",
-        thankYouTitle: "You're on the Wishlist!",
-        thankYouSubtitle:
-            "Thank you! We'll contact you on Telegram or by phone as soon as the experience is ready to launch.",
+            "The fee is 50,000 sum. You'll be first to receive an invitation. By registering, you agree to a consultation.",
+        consentText: "I agree to be contacted about the 'One Day Student' service.",
+
+        // Removed ThankYou page text
+        thankYouTitle: "",
+        thankYouSubtitle: "",
+
         headerTitle: "One Day Student",
-        consentText: "I agree to be contacted about this university recommendation.",
-        consentError: "Please provide your consent to proceed with your application.",
-        clickToSelect: "Choose a university to reserve your spot",
-        backButton: "Back to recommendations",
+        clickToSelect: "", // No longer needed
+        backButton: "Back", // Simplified
         footerText: "All rights reserved.",
         seo: {
             homeTitle: "One Day Student - Find Your Perfect University",
@@ -41,45 +51,52 @@ export const translations: Record<Lang, TranslationSet> = {
             quizTitle: "University Selection Quiz | One Day Student",
             quizDescription:
                 "Answer 10 short questions to receive a personalized university recommendation.",
-            resultsTitle: "Quiz Results | One Day Student",
+            resultsTitle: "Your Quiz Results | One Day Student",
             resultsDescription:
-                "Here are the universities and programs recommended for you based on your answers."
+                "Here are the universities recommended for you. Book your 'One Day Student' experience now."
         }
     },
 
     ru: {
         heroTitle: "Не уверены в выборе будущей специальности?",
         heroSubtitle:
-            "Попробуйте прежде чем выбирать. Ответьте на 10 быстрых вопросов, чтобы получить персональную рекомендацию и найти ЛУЧШИЙ университет.",
+            "Ответьте на 10 быстрых вопросов и узнайте, в каком университете вы можете **стать студентом на один день**.",
         heroButton: "Найти мой идеальный университет",
+
         calculatingTitle: "Анализируем ваш профиль...",
         calculatingSubtitle: "Готовим ваши персональные рекомендации!",
+
+        // New "Gate" Page Text
+        gateTitle: "Ваши рекомендации готовы!",
+        gateSubtitle: "Зарегистрируйтесь, чтобы увидеть свои результаты и стать **'Студентом на один день'**.",
+        gateSubmitButton: "ПОКАЗАТЬ РЕЗУЛЬТАТЫ И ЗАРЕГИСТРИРОВАТЬСЯ",
+
+        // New "Results & Upsell" Page Text
         resultsTitle: "Ваши персональные рекомендации!",
-        resultsSubtitle:
-            "Исходя из ваших целей и стиля обучения, это университеты, где вы сможете успешно пройти 'Один день студента'.",
+        resultsSubtitle: "Вот лучшие университеты, которые подходят вам на основе ваших ответов.",
+        resultsUpsellTitle: "Теперь посетите эти университеты лично!",
+        resultsUpsellBody: "Станьте **'Студентом на один день'** за 50 000 сум. Посещайте реальные занятия, общайтесь со студентами и сделайте правильный выбор на следующие 4 года.",
+        resultsTelegramButton: "ЗАБРОНИРОВАТЬ ЧЕРЕЗ TELEGRAM",
+
         topMatch: "ЛУЧШЕЕ СОВПАДЕНИЕ",
-        reserveTitle: "Зарезервируйте свое место!",
-        reserveSubtitle:
-            "Пилотные группы ограничены. Войдите в список ожидания, чтобы получить приглашение.",
-        choosePrompt: "Сначала выберите университет, который вам интересен.",
-        yourName: "Ваше имя",
+        yourName: "Ваше полное имя",
         yourContact: "Ваш Telegram или телефон",
-        submitButton: "ЗАБРОНИРОВАТЬ МОЕ МЕСТО",
-        submittingButton: "Бронируем...",
-        formError: "Пожалуйста, заполните оба поля.",
+        submittingButton: "Отправка...",
+        formError: "Пожалуйста, заполните все поля.",
+        consentError: "Пожалуйста, дайте согласие, чтобы продолжить.",
         devError: "Разработчику нужно сначала настроить URL Google Sheet!",
         submitError: "Что-то пошло не так. Пожалуйста, попробуйте снова.",
         formFinePrint:
-            "Стоимость услуги 50 000 сум. Вы получите приглашение первым. Пожалуйста, ознакомьтесь с условиями.",
-        thankYouTitle: "Вы в списке ожидания!",
-        thankYouSubtitle:
-            "Спасибо! Мы свяжемся с вами в Telegram или по телефону, как только всё будет готово.",
+            "Стоимость услуги 50 000 сум. Вы получите приглашение. Регистрируясь, вы соглашаетесь на консультацию.",
+        consentText: "Я согласен(а) на связь по поводу услуги 'Студент на один день'.",
+
+        // Removed ThankYou page text
+        thankYouTitle: "",
+        thankYouSubtitle: "",
+
         headerTitle: "Студент на один день",
-        consentText:
-            "Я согласен(а) на связь по поводу рекомендации этого университета.",
-        consentError: "Пожалуйста, дайте согласие, чтобы продолжить.",
-        clickToSelect: "Выберите университет для бронирования места",
-        backButton: "Назад к рекомендациям",
+        clickToSelect: "", // No longer needed
+        backButton: "Назад", // Simplified
         footerText: "Все права защищены.",
         seo: {
             homeTitle: "Студент на один день - Найдите свой идеальный университет",
@@ -90,42 +107,50 @@ export const translations: Record<Lang, TranslationSet> = {
                 "Ответьте на 10 вопросов и получите персональную рекомендацию университета.",
             resultsTitle: "Результаты теста | Студент на один день",
             resultsDescription:
-                "Рекомендованные для вас университеты и направления на основе ваших ответов."
+                "Рекомендованные для вас университеты. Забронируйте ваш опыт 'Студент на один день'."
         }
     },
 
     uz: {
         heroTitle: "Bo‘lajak mutaxassisingiz haqida ikkilanyapsizmi?",
         heroSubtitle:
-            "Tanlashdan oldin sinab ko‘ring. ENG YAXSHI universitetni topish uchun 10 ta tez savolga javob bering va shaxsiy tavsiya oling.",
+            "10 ta tez savolga javob bering va qaysi universitetda 'bir kun talaba bo‘lishingiz' mumkinligini bilib oling.",
         heroButton: "Mos universitetimni topish",
+
         calculatingTitle: "Sizning profilingiz tahlil qilinmoqda...",
         calculatingSubtitle: "Shaxsiy tavsiyalar tayyorlanmoqda!",
+
+        // New "Gate" Page Text
+        gateTitle: "Natijalaringiz tayyor!",
+        gateSubtitle: "Natijalarni ko'rish va **'Bir Kun Talaba'** bo'lish uchun ro'yxatdan o'ting.",
+        gateSubmitButton: "NATIJALARNI KO'RISH VA RO'YXATDAN O'TISH",
+
+        // New "Results & Upsell" Page Text
         resultsTitle: "Siz uchun mos tavsiyalar!",
-        resultsSubtitle:
-            "Maqsadlaringiz va ta'lim uslubingizga qarab, bu siz 'Bir kun talaba' sifatida muvaffaqiyatli bo'lishingiz mumkin bo‘lgan eng yaxshi universitetlardir.",
+        resultsSubtitle: "Sizning javoblaringiz asosida sizga eng mos keladigan universitetlar:",
+        resultsUpsellTitle: "Endi bu universitetlarga shaxsan tashrif buyuring!",
+        resultsUpsellBody: "50,000 so'm evaziga 'Bir Kun Talaba' bo'ling. Haqiqiy darslarga kiring, talabalar bilan gaplashing va 4 yillik kelajagingizni to'g'ri tanlang.",
+        resultsTelegramButton: "TELEGRAM ORQALI BAND QILISH",
+
         topMatch: "ENG YAXSHI MOSLIK",
-        reserveTitle: "O'z joyingizni qo'riqlang!",
-        reserveSubtitle:
-            "Pilot guruhlar cheklangan. Taklifnoma olish uchun istaklar ro'yxatiga qo'shiling.",
-        choosePrompt: "Avvalo sizni eng ko‘p qiziqtirgan universitetni tanlang.",
-        yourName: "Ismingiz",
+        yourName: "To'liq Ismingiz",
         yourContact: "Telegram yoki telefon raqamingiz",
-        submitButton: "O'Z JOYIMNI BAND QILISH",
-        submittingButton: "Bajarilmoqda...",
-        formError: "Iltimos, ikkala maydonni ham to'ldiring.",
+        submittingButton: "Yuborilmoqda...",
+        formError: "Iltimos, barcha maydonlarni to'ldiring.",
+        consentError: "Iltimos, davom etish uchun roziligingizni bering.",
         devError: "Dasturchi avvalo Google Sheet URL manzilini sozlashi kerak!",
         submitError: "Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.",
         formFinePrint:
-            "Xizmat narxi 50 000 so‘m. Taklifnomani birinchi bo‘lib olasiz. Iltimos, shartlar bilan tanishing.",
-        thankYouTitle: "Siz istaklar ro'yxatidasiz!",
-        thankYouSubtitle:
-            "Rahmat! 'Bir kun talaba' tajribasi tayyor bo‘lishi bilan siz bilan Telegram yoki telefon orqali bog‘lanamiz.",
+            "Xizmat narxi 50 000 so'm. Taklifnomani birinchi bo'lib olasiz. Ro'yxatdan o'tish orqali siz maslahat olishga rozilik bildirasiz.",
+        consentText: "'Bir Kun Talaba' xizmati bo'yicha men bilan bog'lanishlariga roziman.",
+
+        // Removed ThankYou page text
+        thankYouTitle: "",
+        thankYouSubtitle: "",
+
         headerTitle: "Bir Kun Talaba",
-        consentText: "Ushbu universitet bo‘yicha tavsiya olish uchun men bilan bog‘lanishlariga roziman.",
-        consentError: "Iltimos, davom etish uchun roziligingizni bering.",
-        clickToSelect: "Joyni band qilish uchun universitetni tanlang",
-        backButton: "Tavsiyalarga qaytish",
+        clickToSelect: "", // No longer needed
+        backButton: "Orqaga", // Simplified
         footerText: "Barcha huquqlar himoyalangan.",
         seo: {
             homeTitle: "Bir Kun Talaba - O'zingizga mos universitetni toping",
@@ -136,7 +161,7 @@ export const translations: Record<Lang, TranslationSet> = {
                 "Kelajakdagi kasbingizni aniqlash uchun tez va sodda savollarga javob bering.",
             resultsTitle: "Test Natijalari | Bir Kun Talaba",
             resultsDescription:
-                "Siz uchun tavsiya etilgan universitetlar va yo'nalishlarni ko'rib chiqing."
+                "Siz uchun tavsiya etilgan universitetlar. 'Bir Kun Talaba' tajribangizni hoziroq band qiling."
         }
     }
 };

@@ -7,20 +7,21 @@ import {universitiesData} from './data/universities';
 import {Hero} from './components/Hero';
 import {Quiz} from './components/Quiz';
 import {Calculating} from './components/Calculating';
+import {Gate} from './components/Gate';
 import {Results} from './components/Results';
-import {ThankYou} from './components/ThankYou';
 import {LanguageSwitcher} from './components/LanguageSwitcher';
 import {MouseFollower} from './utils/mouseEffect.tsx';
 import {QuizProvider, useQuizContext} from './utils/QuizContext.tsx';
 import {FaTelegram} from 'react-icons/fa';
 import image from "./assets/logo.png";
-import { SeoUpdater } from './components/SeoUpdater'; // Import the new universal component
+import { SeoUpdater } from './components/SeoUpdater';
 
 function AppContent() {
     const [lang, setLang] = useState<Lang>('uz');
     const [appState, setAppState] = useState<AppState>(() => {
         if (typeof window !== 'undefined') {
             const savedAppState = localStorage.getItem('appState');
+            if (savedAppState === 'thanks') return 'hero';
             return (savedAppState as AppState) || 'hero';
         }
         return 'hero';
@@ -44,7 +45,7 @@ function AppContent() {
     const { answers, updateAnswer, removeAnswer, resetAnswers } = useQuizContext();
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && appState !== 'thanks') {
+        if (typeof window !== 'undefined') {
             localStorage.setItem('appState', appState);
         }
     }, [appState]);
@@ -74,18 +75,11 @@ function AppContent() {
         if (appState === 'calculating') {
             const timer = setTimeout(() => {
                 calculateResults(answers);
-                setAppState('results');
+                setAppState('gate');
             }, 2500);
             return () => clearTimeout(timer);
         }
     }, [appState, answers]);
-
-    useEffect(() => {
-        if (appState === 'thanks') {
-            resetAnswers();
-        }
-    }, [appState, resetAnswers]);
-
 
     const t = translations[lang];
     const quizQuestions = quizQuestionsData[lang];
@@ -93,6 +87,11 @@ function AppContent() {
 
     const handleGoBack = () => {
         if (appState === 'results') {
+            setAppState('gate');
+            return;
+        }
+
+        if (appState === 'gate') {
             const lastQuestionIndex = quizQuestions.length - 1;
             const lastQuestion = quizQuestions[lastQuestionIndex];
             if (lastQuestion) {
@@ -112,6 +111,7 @@ function AppContent() {
                 }
                 setCurrentQuestionIndex(previousQuestionIndex);
             } else {
+                resetAnswers();
                 setAppState('hero');
             }
         }
@@ -153,7 +153,7 @@ function AppContent() {
         switch (appState) {
             case 'hero':
                 return <Hero onStart={() => setAppState('quiz')} t={t}/>;
-            case 'quiz':
+            case'quiz':
                 return (
                     <Quiz
                         question={quizQuestions[currentQuestionIndex]}
@@ -164,16 +164,22 @@ function AppContent() {
                 );
             case 'calculating':
                 return <Calculating t={t}/>;
+            case 'gate':
+                // *** CHANGE IS HERE ***
+                // We now pass the recommendations to the Gate component
+                return <Gate
+                    recommendations={recommendations}
+                    onRegister={() => setAppState('results')}
+                    t={t}
+                />;
             case 'results':
-                return <Results recommendations={recommendations} onConfirm={() => setAppState('thanks')} t={t}/>;
-            case 'thanks':
-                return <ThankYou t={t}/>;
+                return <Results recommendations={recommendations} t={t}/>;
             default:
                 return <Hero onStart={() => setAppState('quiz')} t={t}/>;
         }
     };
 
-    const showBackButton = appState === 'quiz' || appState === 'results' || appState === 'calculating';
+    const showBackButton = appState === 'quiz' || appState === 'gate' || appState === 'results' || appState === 'calculating';
 
     return (
         <div className="flex flex-col min-h-screen relative overflow-x-hidden">
@@ -205,7 +211,7 @@ function AppContent() {
                     <div className="flex items-center gap-4">
                         <LanguageSwitcher lang={lang} setLang={setLang}/>
                         <a
-                            href="https://t.me/shohhen"
+                            href="https://t.me/BirKunTalabaBot" // <-- IMPORTANT: Change this to your Livegram bot URL
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-blue-400"
@@ -239,3 +245,4 @@ function App() {
 }
 
 export default App;
+
