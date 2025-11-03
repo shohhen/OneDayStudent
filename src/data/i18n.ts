@@ -6,7 +6,7 @@ export const translations: Record<Lang, TranslationSet> = {
     en: {
         heroTitle: "Unsure About Your Future Major?",
         heroSubtitle:
-            "Answer 10 quick questions and find out which university you can **be a student at for one day**.",
+            "Answer 10 quick questions and find out which university you can be a 'One Day Student'.",
         heroButton: "Find My Perfect University",
 
         calculatingTitle: "Analyzing your profile...",
@@ -14,14 +14,14 @@ export const translations: Record<Lang, TranslationSet> = {
 
         // New "Gate" Page Text
         gateTitle: "Your Recommendations Are Ready!",
-        gateSubtitle: "Register to see your results and to become a **'One Day Student'**.",
+        gateSubtitle: "Register to see your results and to become a 'One Day Student'.",
         gateSubmitButton: "SEE RESULTS AND REGISTER",
 
         // New "Results & Upsell" Page Text
         resultsTitle: "Your Personalized Matches!",
         resultsSubtitle: "Here are the top universities where you'd thrive based on your answers.",
         resultsUpsellTitle: "Now, visit these universities in person!",
-        resultsUpsellBody: "Become a **'One Day Student'** for 50,000 UZS. Attend real classes, talk to students, and make the right choice for your next 4 years.",
+        resultsUpsellBody: "Become a 'One Day Student' for 50,000 UZS. Attend real classes, talk to students, and make the right choice for your next 4 years.",
         resultsTelegramButton: "RESERVE VIA TELEGRAM",
 
         topMatch: "TOP MATCH",
@@ -60,7 +60,7 @@ export const translations: Record<Lang, TranslationSet> = {
     ru: {
         heroTitle: "Не уверены в выборе будущей специальности?",
         heroSubtitle:
-            "Ответьте на 10 быстрых вопросов и узнайте, в каком университете вы можете **стать студентом на один день**.",
+            "Ответьте на 10 быстрых вопросов и узнайте, в каком университете вы можете стать 'Студентом на Один День'.",
         heroButton: "Найти мой идеальный университет",
 
         calculatingTitle: "Анализируем ваш профиль...",
@@ -68,14 +68,14 @@ export const translations: Record<Lang, TranslationSet> = {
 
         // New "Gate" Page Text
         gateTitle: "Ваши рекомендации готовы!",
-        gateSubtitle: "Зарегистрируйтесь, чтобы увидеть свои результаты и стать **'Студентом на один день'**.",
+        gateSubtitle: "Зарегистрируйтесь, чтобы увидеть свои результаты и стать 'Студентом на один день'.",
         gateSubmitButton: "ПОКАЗАТЬ РЕЗУЛЬТАТЫ И ЗАРЕГИСТРИРОВАТЬСЯ",
 
         // New "Results & Upsell" Page Text
         resultsTitle: "Ваши персональные рекомендации!",
         resultsSubtitle: "Вот лучшие университеты, которые подходят вам на основе ваших ответов.",
         resultsUpsellTitle: "Теперь посетите эти университеты лично!",
-        resultsUpsellBody: "Станьте **'Студентом на один день'** за 50 000 сум. Посещайте реальные занятия, общайтесь со студентами и сделайте правильный выбор на следующие 4 года.",
+        resultsUpsellBody: "Станьте 'Студентом на один день' за 50 000 сум. Посещайте реальные занятия, общайтесь со студентами и сделайте правильный выбор на следующие 4 года.",
         resultsTelegramButton: "ЗАБРОНИРОВАТЬ ЧЕРЕЗ TELEGRAM",
 
         topMatch: "ЛУЧШЕЕ СОВПАДЕНИЕ",
@@ -114,7 +114,7 @@ export const translations: Record<Lang, TranslationSet> = {
     uz: {
         heroTitle: "Bo‘lajak mutaxassisingiz haqida ikkilanyapsizmi?",
         heroSubtitle:
-            "10 ta tez savolga javob bering va qaysi universitetda 'bir kun talaba bo‘lishingiz' mumkinligini bilib oling.",
+            "10 ta tez savolga javob bering va qaysi universitetda 'Bir Kun Talaba' bo‘lishingiz mumkinligini bilib oling.",
         heroButton: "Mos universitetimni topish",
 
         calculatingTitle: "Sizning profilingiz tahlil qilinmoqda...",
@@ -122,8 +122,8 @@ export const translations: Record<Lang, TranslationSet> = {
 
         // New "Gate" Page Text
         gateTitle: "Natijalaringiz tayyor!",
-        gateSubtitle: "Natijalarni ko'rish va **'Bir Kun Talaba'** bo'lish uchun ro'yxatdan o'ting.",
-        gateSubmitButton: "NATIJALARNI KO'RISH VA RO'YXATDAN O'TISH",
+        gateSubtitle: "Natijalarni ko'rish va 'Bir Kun Talaba' bo'lish uchun ro'yxatdan o'ting.",
+        gateSubmitButton: "NATIJALARNI KO'RISH",
 
         // New "Results & Upsell" Page Text
         resultsTitle: "Siz uchun mos tavsiyalar!",
