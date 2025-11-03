@@ -11,10 +11,8 @@ export interface SeoTranslations {
     resultsDescription: string;
 }
 
-
 export type TranslationSet = {
-    [key: string]: string;
-} & {
+    [key: string]: string | SeoTranslations;
     seo?: SeoTranslations;
 };
 
