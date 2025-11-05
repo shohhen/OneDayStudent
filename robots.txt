@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://birkuntalaba.uz/sitemap.xml
