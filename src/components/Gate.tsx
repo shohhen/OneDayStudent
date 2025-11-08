@@ -130,7 +130,6 @@ export const Gate: React.FC<GateProps> = ({ recommendations, onRegister, t }) =>
                         {isSubmitting ? t.submittingButton : t.gateSubmitButton}
                     </Button>
                     {error && <p className="text-destructive text-xs sm:text-sm mt-2 text-center">{error}</p>}
-                    <p className="text-xs text-muted-foreground text-center mt-3">{t.formFinePrint}</p>
                 </form>
             </MouseTrackingCard>
         </div>
