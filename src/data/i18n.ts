@@ -21,7 +21,7 @@ export const translations: Record<Lang, TranslationSet> = {
         resultsTitle: "Your Personalized Matches!",
         resultsSubtitle: "Here are the top universities where you'd thrive based on your answers.",
         resultsUpsellTitle: "Now, visit these universities in person!",
-        resultsUpsellBody: "Become a 'One Day Student' for 50,000 UZS. Attend real classes, talk to students, and make the right choice for your next 4 years.",
+        resultsUpsellBody: "Become a 'One Day Student' for 170,000 UZS. Attend real classes, talk to students, and make the right choice for your next 4 years.",
         resultsTelegramButton: "RESERVE VIA TELEGRAM",
 
         topMatch: "TOP MATCH",
@@ -33,7 +33,7 @@ export const translations: Record<Lang, TranslationSet> = {
         devError: "The developer needs to set up the Google Sheet URL first!",
         submitError: "Something went wrong. Please try again.",
         formFinePrint:
-            "The fee is 50,000 sum. You'll be first to receive an invitation. By registering, you agree to a consultation.",
+            "The fee is 170,000 sum. You'll be first to receive an invitation. By registering, you agree to a consultation.",
         consentText: "I agree to be contacted about the 'One Day Student' service.",
 
         // Removed ThankYou page text
@@ -75,7 +75,7 @@ export const translations: Record<Lang, TranslationSet> = {
         resultsTitle: "Ваши персональные рекомендации!",
         resultsSubtitle: "Вот лучшие университеты, которые подходят вам на основе ваших ответов.",
         resultsUpsellTitle: "Теперь посетите эти университеты лично!",
-        resultsUpsellBody: "Станьте 'Студентом на один день' за 50 000 сум. Посещайте реальные занятия, общайтесь со студентами и сделайте правильный выбор на следующие 4 года.",
+        resultsUpsellBody: "Станьте 'Студентом на один день' за 170 000 сум. Посещайте реальные занятия, общайтесь со студентами и сделайте правильный выбор на следующие 4 года.",
         resultsTelegramButton: "ЗАБРОНИРОВАТЬ ЧЕРЕЗ TELEGRAM",
 
         topMatch: "ЛУЧШЕЕ СОВПАДЕНИЕ",
@@ -87,7 +87,7 @@ export const translations: Record<Lang, TranslationSet> = {
         devError: "Разработчику нужно сначала настроить URL Google Sheet!",
         submitError: "Что-то пошло не так. Пожалуйста, попробуйте снова.",
         formFinePrint:
-            "Стоимость услуги 50 000 сум. Вы получите приглашение. Регистрируясь, вы соглашаетесь на консультацию.",
+            "Стоимость услуги 170 000 сум. Вы получите приглашение. Регистрируясь, вы соглашаетесь на консультацию.",
         consentText: "Я согласен(а) на связь по поводу услуги 'Студент на один день'.",
 
         // Removed ThankYou page text
@@ -129,7 +129,7 @@ export const translations: Record<Lang, TranslationSet> = {
         resultsTitle: "Siz uchun mos tavsiyalar!",
         resultsSubtitle: "Sizning javoblaringiz asosida sizga eng mos keladigan universitetlar:",
         resultsUpsellTitle: "Endi bu universitetlarga shaxsan tashrif buyuring!",
-        resultsUpsellBody: "50,000 so'm evaziga 'Bir Kun Talaba' bo'ling. Haqiqiy darslarga kiring, talabalar bilan gaplashing va 4 yillik kelajagingizni to'g'ri tanlang.",
+        resultsUpsellBody: "170,000 so'm evaziga 'Bir Kun Talaba' bo'ling. Haqiqiy darslarga kiring, talabalar bilan gaplashing va 4 yillik kelajagingizni to'g'ri tanlang.",
         resultsTelegramButton: "TELEGRAM ORQALI BAND QILISH",
 
         topMatch: "ENG YAXSHI MOSLIK",
@@ -141,7 +141,7 @@ export const translations: Record<Lang, TranslationSet> = {
         devError: "Dasturchi avvalo Google Sheet URL manzilini sozlashi kerak!",
         submitError: "Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.",
         formFinePrint:
-            "Xizmat narxi 50 000 so'm. Taklifnomani birinchi bo'lib olasiz. Ro'yxatdan o'tish orqali siz maslahat olishga rozilik bildirasiz.",
+            "Xizmat narxi 170 000 so'm. Taklifnomani birinchi bo'lib olasiz. Ro'yxatdan o'tish orqali siz maslahat olishga rozilik bildirasiz.",
         consentText: "'Bir Kun Talaba' xizmati bo'yicha men bilan bog'lanishlariga roziman.",
 
         // Removed ThankYou page text
